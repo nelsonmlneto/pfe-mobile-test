@@ -1,28 +1,28 @@
 package com.shems.mobile
 ;
 
+import static org.junit.Assert.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 import io.selendroid.client.SelendroidDriver;
 import io.selendroid.common.SelendroidCapabilities;
 import io.selendroid.common.device.DeviceTargetPlatform;
 
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Test;
+import org.openqa.selenium.interactions.touch.TouchActions;
 
 public class ObjectFilterTestSuite {
   private static WebDriver driver;
 
-  
-
-  @BeforeSuite
-  public static void setUpAll() throws Exception {
+    
+  @Before
+  public void setUp() throws Exception {
 	  
 	  SelendroidCapabilities capa = new SelendroidCapabilities();
 	  capa.setAut("com.shems.mobile:1.0");	  
@@ -32,26 +32,95 @@ public class ObjectFilterTestSuite {
       capa.setModel("Galaxy Nexus");
       
 	  driver = new SelendroidDriver(capa);
+	  
   }
-  
 
   @Test
   public void testObjectFilterAll() throws Exception {
-	  System.out.println("Teste");
+	  	  
+	driver.findElement(By.linkText("Objects")).click();
 	  
-	  WebElement inputField = driver.findElement(By.id("textGoal"));
-	  System.out.println(">>> " + inputField.getText());
+	assertTrue(isElementPresent(By.linkText("Air Conditioner")));
+	assertTrue(isElementPresent(By.linkText("Clothes Iron")));
+	assertTrue(isElementPresent(By.linkText("Hair Straightener")));
+	assertTrue(isElementPresent(By.linkText("Couple Bedroom Light")));
+	assertTrue(isElementPresent(By.linkText("Oven")));
+	assertTrue(isElementPresent(By.linkText("Kitchen Light")));
+	assertTrue(isElementPresent(By.linkText("TV")));
+	assertTrue(isElementPresent(By.linkText("Garage Light")));
+	  	  
+	WebElement objList = driver.findElement(By.id("listViewObj"));
+	TouchActions touch = new TouchActions(driver).flick(objList, 0, -200, 0);
+	touch.perform();
+
+	assertTrue(isElementPresent(By.linkText("Shaving Machine")));
+	    
+  }
+  
+  @Test
+  public void testObjectFilterKitchen() throws Exception {
+	  
+	driver.findElement(By.linkText("Objects")).click();
+	driver.findElement(By.linkText("All")).click();
+	driver.findElement(By.xpath("//AppCompatTextView[2]")).click();
 	
-	  //assertTrue(isElementPresent(By.linkText("General Energy Consumption")));
-	  assertTrue(isElementPresent(By.linkText("General Energy Consumption")));
+	assertTrue(isElementPresent(By.linkText("Oven")));
+	assertTrue(isElementPresent(By.linkText("Kitchen Light")));
+	
+	assertFalse(isElementPresent(By.linkText("Air Conditioner")));
+	assertFalse(isElementPresent(By.linkText("Clothers Iron")));  
+	assertFalse(isElementPresent(By.linkText("Hair Straightener")));  
+	assertFalse(isElementPresent(By.linkText("Couple Bedroom Light"))); 
+	assertFalse(isElementPresent(By.linkText("TV")));
+	assertFalse(isElementPresent(By.linkText("Garage Light")));  
+	assertFalse(isElementPresent(By.linkText("Shaving Machine"))); 
 	  
   }
   
+  @Test
+  public void testObjectFilterBathroom() throws Exception {
+	
+	driver.findElement(By.linkText("Objects")).click();
+	driver.findElement(By.linkText("All")).click();
+	driver.findElement(By.xpath("//AppCompatTextView[8]")).click();
+	
+	assertTrue(isElementPresent(By.linkText("Hair Straightener")));	
+	assertTrue(isElementPresent(By.linkText("Shaving Machine")));
+	
+	assertFalse(isElementPresent(By.linkText("Air Conditioner")));
+	assertFalse(isElementPresent(By.linkText("Clothers Iron")));  
+	assertFalse(isElementPresent(By.linkText("Couple Bedroom Light")));
+	assertFalse(isElementPresent(By.linkText("Oven")));
+	assertFalse(isElementPresent(By.linkText("Kitchen Light")));  
+	assertFalse(isElementPresent(By.linkText("TV")));
+	assertFalse(isElementPresent(By.linkText("Garage Light")));  
 
-  @AfterSuite
-  public static void tearDown() throws Exception {
-	  driver.quit();
   }
+    
+  @Test
+  public void testObjectFilterKidsBedroom() throws Exception{
+	
+	driver.findElement(By.linkText("Objects")).click();
+	driver.findElement(By.linkText("All")).click();
+	driver.findElement(By.xpath("//AppCompatTextView[6]")).click();
+	
+	assertFalse(isElementPresent(By.linkText("Air Conditioner")));
+	assertFalse(isElementPresent(By.linkText("Clothes Iron")));
+	assertFalse(isElementPresent(By.linkText("Hair Straightener")));
+	assertFalse(isElementPresent(By.linkText("Couple Bedroom Light")));
+	assertFalse(isElementPresent(By.linkText("Oven")));
+	assertFalse(isElementPresent(By.linkText("Kitchen Light")));
+	assertFalse(isElementPresent(By.linkText("TV")));
+	assertFalse(isElementPresent(By.linkText("Garage Light")));
+	assertFalse(isElementPresent(By.linkText("Shaving Machine")));
+	  
+  }
+  
+  @After
+  public void tearDown(){
+	  driver.quit();  
+  }
+
   
   private boolean isElementPresent(By by) {
     try {
@@ -60,7 +129,8 @@ public class ObjectFilterTestSuite {
     	driver.manage().timeouts().implicitlyWait(1000, TimeUnit.SECONDS);
     	return true;
     
-    } catch (NoSuchElementException e) {
+    } catch (Exception e) {
+    	System.out.println(e.toString());
     	return false;
     }
   }
