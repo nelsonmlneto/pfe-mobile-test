@@ -1,12 +1,13 @@
 package com.shems.mobile
 ;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.testng.AssertJUnit.assertTrue;
 import io.selendroid.client.SelendroidDriver;
 import io.selendroid.common.SelendroidCapabilities;
 import io.selendroid.common.device.DeviceTargetPlatform;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
@@ -20,6 +21,8 @@ import org.openqa.selenium.interactions.touch.TouchActions;
 public class ObjectFilterTestSuite {
   private static WebDriver driver;
 
+  private final String OFF = "off";
+  private final String ON = "on";
     
   @Before
   public void setUp() throws Exception {
@@ -39,25 +42,44 @@ public class ObjectFilterTestSuite {
   public void testObjectFilterAll() throws Exception {
 	  	  
 	driver.findElement(By.linkText("Objects")).click();
-	  
+	List<WebElement> statusList = driver.findElements(By.id("textStatus"));
+	
 	assertTrue(isElementPresent(By.linkText("Air Conditioner")));
+	assertEquals(this.OFF, statusList.get(0).getText());
+	
 	assertTrue(isElementPresent(By.linkText("Clothes Iron")));
+	assertEquals(this.ON, statusList.get(1).getText());
+	
 	assertTrue(isElementPresent(By.linkText("Hair Straightener")));
+	assertEquals(this.ON, statusList.get(2).getText());
+	
 	assertTrue(isElementPresent(By.linkText("Couple Bedroom Light")));
+	assertEquals(this.OFF, statusList.get(3).getText());
+	
 	assertTrue(isElementPresent(By.linkText("Oven")));
+	assertEquals(this.OFF, statusList.get(4).getText());
+	
 	assertTrue(isElementPresent(By.linkText("Kitchen Light")));
+	assertEquals(this.ON, statusList.get(5).getText());
+	
 	assertTrue(isElementPresent(By.linkText("TV")));
+	assertEquals(this.OFF, statusList.get(6).getText());
+	
 	assertTrue(isElementPresent(By.linkText("Garage Light")));
+	assertEquals(this.ON, statusList.get(7).getText());
 	  	  
 	WebElement objList = driver.findElement(By.id("listViewObj"));
 	TouchActions touch = new TouchActions(driver).flick(objList, 0, -200, 0);
 	touch.perform();
 
+	statusList = driver.findElements(By.id("textStatus"));
+	
 	assertTrue(isElementPresent(By.linkText("Shaving Machine")));
+	assertEquals(this.OFF, statusList.get(statusList.size() - 1).getText());
 	    
   }
   
-  @Test
+//  @Test
   public void testObjectFilterKitchen() throws Exception {
 	  
 	driver.findElement(By.linkText("Objects")).click();
@@ -77,7 +99,7 @@ public class ObjectFilterTestSuite {
 	  
   }
   
-  @Test
+//  @Test
   public void testObjectFilterBathroom() throws Exception {
 	
 	driver.findElement(By.linkText("Objects")).click();
@@ -97,7 +119,7 @@ public class ObjectFilterTestSuite {
 
   }
     
-  @Test
+//  @Test
   public void testObjectFilterKidsBedroom() throws Exception{
 	
 	driver.findElement(By.linkText("Objects")).click();

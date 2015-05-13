@@ -1,7 +1,11 @@
 package com.shems.mobile;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
 import io.selendroid.client.SelendroidDriver;
+import io.selendroid.client.SelendroidKeys;
 import io.selendroid.common.SelendroidCapabilities;
 import io.selendroid.common.device.DeviceTargetPlatform;
 
@@ -11,15 +15,17 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.touch.TouchActions;
 
 public class ObjectVisualizationTestSuite {
   private static WebDriver driver;
 
+  private final String OFF = "off";
+  private final String ON = "on";
     
   @Before
   public void setUp() throws Exception {
-	  
 	  SelendroidCapabilities capa = new SelendroidCapabilities();
 	  capa.setAut("com.shems.mobile:1.0");	  
 	  capa.setPlatformVersion(DeviceTargetPlatform.ANDROID19);     
@@ -27,8 +33,7 @@ public class ObjectVisualizationTestSuite {
 	  capa.setEmulator(true);
 	  capa.setModel("Galaxy Nexus");
 	  
-	  driver = new SelendroidDriver(capa);
-	  
+	  driver = new SelendroidDriver(capa);  
   }
   
   @Test
@@ -43,10 +48,10 @@ public class ObjectVisualizationTestSuite {
   @Test
   public void testObjectVisualization2() throws Exception {
 	  driver.findElement(By.linkText("Objects")).click();
-	  driver.findElement(By.linkText("Clothers Iron")).click();
+	  driver.findElement(By.linkText("Clothes Iron")).click();
 	
 	  assertEquals("Object Visualization", driver.findElement(By.id("labelObjVisualizationTitle")).getText());
-	  assertEquals("Clothers Iron", driver.findElement(By.id("textObjName")).getText());
+	  assertEquals("Clothes Iron", driver.findElement(By.id("textObjName")).getText());
   }
   
   @Test
@@ -115,6 +120,110 @@ public class ObjectVisualizationTestSuite {
 	
 	  assertEquals("Object Visualization", driver.findElement(By.id("labelObjVisualizationTitle")).getText());
 	  assertEquals("Shaving Machine", driver.findElement(By.id("textObjName")).getText());
+  }
+  
+  @Test
+  public void testSwicthObject1() throws Exception {
+	  
+	  //Open Air Conditioner Visualization and Switch to ON
+	  driver.findElement(By.linkText("Objects")).click();
+	  driver.findElement(By.linkText("Air Conditioner")).click();
+	  driver.findElement(By.id("switchOnOff")).click(); 
+	  assertEquals(this.ON, driver.findElement(By.id("textObjStatus")).getText());
+	  
+	  //Back to List of Objects
+	  new Actions(driver).sendKeys(SelendroidKeys.BACK).perform();
+	  List<WebElement> statusList = driver.findElements(By.id("textStatus"));
+	  assertEquals(this.ON, statusList.get(0).getText());
+	  
+	  //Open Air Conditioner Visualization and Switch to OFF
+	  driver.findElement(By.linkText("Air Conditioner")).click();
+	  driver.findElement(By.id("switchOnOff")).click(); 
+	  assertEquals(this.OFF, driver.findElement(By.id("textObjStatus")).getText());
+	  
+	  //Back to List of Objects
+	  new Actions(driver).sendKeys(SelendroidKeys.BACK).perform();
+	  statusList = driver.findElements(By.id("textStatus"));
+	  assertEquals(this.OFF, statusList.get(0).getText());
+	    
+  }
+  
+  @Test
+  public void testSwicthObject2() throws Exception {
+	  
+	  //Open Object Visualization and Switch to ON
+	  driver.findElement(By.linkText("Objects")).click();
+	  driver.findElement(By.linkText("Clothes Iron")).click();
+	  driver.findElement(By.id("switchOnOff")).click(); 
+	  assertEquals(this.OFF, driver.findElement(By.id("textObjStatus")).getText());
+	  
+	  //Back to List of Objects
+	  new Actions(driver).sendKeys(SelendroidKeys.BACK).perform();
+	  List<WebElement> statusList = driver.findElements(By.id("textStatus"));
+	  assertEquals(this.OFF, statusList.get(1).getText());
+	  
+	  //Open Object Visualization and Switch to OFF
+	  driver.findElement(By.linkText("Clothes Iron")).click();
+	  driver.findElement(By.id("switchOnOff")).click(); 
+	  assertEquals(this.ON, driver.findElement(By.id("textObjStatus")).getText());
+	  
+	  //Back to List of Objects
+	  new Actions(driver).sendKeys(SelendroidKeys.BACK).perform();
+	  statusList = driver.findElements(By.id("textStatus"));
+	  assertEquals(this.ON, statusList.get(1).getText());
+	    
+  }
+  
+  @Test
+  public void testSwicthObject3() throws Exception {
+	  
+	  //Open Object Visualization and Switch to ON
+	  driver.findElement(By.linkText("Objects")).click();
+	  driver.findElement(By.linkText("Oven")).click();
+	  driver.findElement(By.id("switchOnOff")).click(); 
+	  assertEquals(this.ON, driver.findElement(By.id("textObjStatus")).getText());
+	  
+	  //Back to List of Objects
+	  new Actions(driver).sendKeys(SelendroidKeys.BACK).perform();
+	  List<WebElement> statusList = driver.findElements(By.id("textStatus"));
+	  assertEquals(this.ON, statusList.get(4).getText());
+	  
+	  //Open Object Visualization and Switch to OFF
+	  driver.findElement(By.linkText("Oven")).click();
+	  driver.findElement(By.id("switchOnOff")).click(); 
+	  assertEquals(this.OFF, driver.findElement(By.id("textObjStatus")).getText());
+	  
+	  //Back to List of Objects
+	  new Actions(driver).sendKeys(SelendroidKeys.BACK).perform();
+	  statusList = driver.findElements(By.id("textStatus"));
+	  assertEquals(this.OFF, statusList.get(4).getText());
+	    
+  }
+  
+  @Test
+  public void testSwicthObject4() throws Exception {
+	  
+	  //Open Object Visualization and Switch to ON
+	  driver.findElement(By.linkText("Objects")).click();
+	  driver.findElement(By.linkText("Garage Light")).click();
+	  driver.findElement(By.id("switchOnOff")).click(); 
+	  assertEquals(this.OFF, driver.findElement(By.id("textObjStatus")).getText());
+	  
+	  //Back to List of Objects
+	  new Actions(driver).sendKeys(SelendroidKeys.BACK).perform();
+	  List<WebElement> statusList = driver.findElements(By.id("textStatus"));
+	  assertEquals(this.OFF, statusList.get(7).getText());
+	  
+	  //Open Object Visualization and Switch to OFF
+	  driver.findElement(By.linkText("Garage Light")).click();
+	  driver.findElement(By.id("switchOnOff")).click(); 
+	  assertEquals(this.ON, driver.findElement(By.id("textObjStatus")).getText());
+	  
+	  //Back to List of Objects
+	  new Actions(driver).sendKeys(SelendroidKeys.BACK).perform();
+	  statusList = driver.findElements(By.id("textStatus"));
+	  assertEquals(this.ON, statusList.get(7).getText());
+	    
   }
   
   @After
